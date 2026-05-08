@@ -37,27 +37,32 @@ body {
 #npc-popup {
   position: absolute;
   display: none;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   color: #fff;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
   text-align: center;
   z-index: 100;
-  min-width: 160px;
-  max-width: 300px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  min-width: 200px;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.8);
   cursor: pointer;
   user-select: none;
   pointer-events: auto;
+  border: 2px solid #444;
 }
 
 #npc-popup img {
   max-width: 100%;
-  margin-bottom: 8px;
-  border-radius: 4px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #npc-popup p {
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
 }
