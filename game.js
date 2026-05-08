@@ -1,0 +1,113 @@
+const Game = {
+  mainEl: null,
+  popupEl: null,
+  currentLocation: null,
+  npcs: [],
+
+  init() {
+    this.mainEl = document.getElementById('main');
+    this.createPopup();
+    this.setupGlobalEvents();
+    
+    // Load starting location automatically
+    this.loadLocationScript('locations/town.js').then(() => {
+      if (window.TownLocation) {
+        this.loadLocation(window.TownLocation);
+      } else {
+        console.error('TownLocation not found. Make sure locations/town.js is correct.');
+      }
+    }).catch(err => console.error('Failed to load location script:', err));
+  },
+
+  // Dynamically load location scripts
+  loadLocationScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        resolve(); return;
+      }
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  },
+
+  createPopup() {
+    this.popupEl = document.createElement('div');
+    this.popupEl.id = 'npc-popup';
+    this.mainEl.appendChild(this.popupEl);
+  },
+
+  setupGlobalEvents() {
+    // Close popup when clicking outside NPCs or the popup itself
+    this.mainEl.addEventListener('click', (e) => {
+      if (!e.target.closest('.npc') && !e.target.closest('#npc-popup')) {
+        this.hidePopup();
+      }
+    });
+  },
+
+  loadLocation(locationData) {
+    this.unloadCurrent();
+    this.currentLocation = locationData;
+    
+    // Apply background
+    this.mainEl.style.backgroundImage = `url('${locationData.background}')`;
+    
+    // Spawn all NPCs defined in the location
+    locationData.npcs.forEach(npc => this.spawnNPC(npc));
+  },
+
+  spawnNPC(npcData) {
+    const el = document.createElement('div');
+    el.className = 'npc';
+    el.style.left = `${npcData.x}px`;
+    el.style.top = `${npcData.y}px`;
+    el.style.backgroundImage = `url('${npcData.sprite}')`;
+    el.dataset.id = npcData.id;
+
+    el.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent background click from closing popup
+      this.showPopup(npcData, el);
+    });
+
+    this.mainEl.appendChild(el);
+    this.npcs.push(el);
+  },
+
+  showPopup(npcData, npcEl) {
+    const rect = npcEl.getBoundingClientRect();
+    const mainRect = this.mainEl.getBoundingClientRect();
+    
+    // Calculate center position relative to #main
+    const centerX = rect.left - mainRect.left + rect.width / 2;
+    const centerY = rect.top - mainRect.top + rect.height / 2;
+
+    // Build popup content
+    const imgHTML = npcData.popupImage ? `<img src="${npcData.popupImage}" alt="">` : '';
+    this.popupEl.innerHTML = `${imgHTML}<p>${npcData.text}</p>`;
+    
+    // Make visible to measure dimensions
+    this.popupEl.style.display = 'block';
+    void this.popupEl.offsetWidth; // Force browser reflow
+    
+    const popupRect = this.popupEl.getBoundingClientRect();
+    this.popupEl.style.left = `${centerX - popupRect.width / 2}px`;
+    this.popupEl.style.top = `${centerY - popupRect.height / 2}px`;
+  },
+
+  hidePopup() {
+    this.popupEl.style.display = 'none';
+  },
+
+  unloadCurrent() {
+    // Remove NPCs but keep the popup element
+    this.npcs.forEach(el => el.remove());
+    this.npcs = [];
+    this.hidePopup();
+  }
+};
+
+// Start game when DOM is ready
+document.addEventListener('DOMContentLoaded', () => Game.init());
