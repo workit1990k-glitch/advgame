@@ -37,7 +37,7 @@ body {
 #npc-popup {
   position: absolute;
   display: none;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.1);
   color: #fff;
   padding: 20px;
   border-radius: 12px;
@@ -45,11 +45,8 @@ body {
   z-index: 100;
   min-width: 200px;
   max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-  cursor: pointer;
   user-select: none;
   pointer-events: auto;
-  border: 2px solid #444;
 }
 
 #npc-popup img {
