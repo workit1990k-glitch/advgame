@@ -28,8 +28,37 @@ window.TownLocation = {
     }
   ]
 };
+// town.js - Add at the very end
+window.TownSpawner = {
+  interval: null,
+  maxMonsters: 3,
+  spawnRate: 4000, // milliseconds between spawns
+
+  start() {
+    // Clear any existing interval to prevent duplicates
+    if (this.interval) clearInterval(this.interval);
+
+    this.interval = setInterval(() => {
+      // Only spawn if under max limit
+      const activeCount = window.ActiveMonsters ? window.ActiveMonsters.length : 0;
+      if (activeCount < this.maxMonsters && typeof Game !== 'undefined') {
+        // Random position within safe town bounds
+        const x = 150 + Math.floor(Math.random() * 900);
+        const y = 150 + Math.floor(Math.random() * 500);
+        Game.spawnMonster('poring', x, y);
+      }
+    }, this.spawnRate);
+  },
+
+  stop() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+  }
+};
+
+// Auto-start when this file loads
 if (typeof Game !== 'undefined' && typeof Game.spawnMonster === 'function') {
-  setTimeout(() => {
-    Game.spawnMonster('poring', 400, 350);
-  }, 1000);
+  window.TownSpawner.start();
 }
