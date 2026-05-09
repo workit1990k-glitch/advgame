@@ -99,6 +99,84 @@ const Game = {
     this.npcs = [];
     this.hidePopup();
   }
+
+  // Add to Game object in game.js
+
+spawnMonster(monsterId, x, y) {
+  const monster = window.MonsterSpawner.spawn(monsterId, x, y);
+  if (monster) {
+    const el = document.createElement('div');
+    el.className = 'monster';
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    el.style.backgroundImage = `url('${monster.sprite}')`;
+    el.dataset.instanceId = monster.instanceId;
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.attackMonster(monster);
+    });
+    this.mainEl.appendChild(el);
+    monster.element = el;
+  }
+},
+
+attackMonster(monster) {
+  const hero = window.Hero;
+  const damage = Math.max(1, hero.attack - monster.defense);
+  monster.currentHp -= damage;
+  
+  this.showPopup({
+    text: `You attack ${monster.name} for ${damage} damage!`,
+    popupImage: monster.image
+  });
+
+  if (monster.currentHp <= 0) {
+    this.defeatMonster(monster);
+  }
+},
+
+defeatMonster(monster) {
+  const hero = window.Hero;
+  
+  // Award EXP
+  hero.exp += monster.exp;
+  
+  // Award Gold
+  hero.inventory.gold += monster.gold;
+  
+  this.showPopup({
+    text: `${monster.name} defeated! +${monster.exp} EXP, +${monster.gold} Gold`,
+    popupImage: monster.image
+  });
+
+  // Remove monster element
+  if (monster.element) {
+    monster.element.remove();
+  }
+  
+  window.MonsterSpawner.despawn(monster.instanceId);
+  
+  // Check for level up
+  this.checkLevelUp();
+},
+
+checkLevelUp() {
+  const hero = window.Hero;
+  if (hero.exp >= hero.expToLevel) {
+    hero.level++;
+    hero.exp -= hero.expToLevel;
+    hero.expToLevel = Math.floor(hero.expToLevel * 1.5);
+    hero.maxHp += 20;
+    hero.hp = hero.maxHp;
+    hero.attack += 5;
+    
+    this.showPopup({
+      text: `LEVEL UP! You are now level ${hero.level}!`,
+      popupImage: ""
+    });
+  }
+}
+
 };
 
 document.addEventListener('DOMContentLoaded', () => Game.init());
