@@ -98,7 +98,7 @@ const Game = {
     this.npcs.forEach(el => el.remove());
     this.npcs = [];
     this.hidePopup();
-  }
+  },
 
   // Add to Game object in game.js
 
