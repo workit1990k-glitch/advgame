@@ -8,21 +8,7 @@ const Game = {
     this.mainEl = document.getElementById('main');
     this.createPopup();
     this.setupGlobalEvents();
-     if (!window.Hero) {
-    window.Hero = {
-      name: "Traveler",
-      level: 1,
-      hp: 100,
-      maxHp: 100,
-      attack: 10,
-      defense: 2,
-      exp: 0,
-      expToLevel: 100,
-      inventory: { gold: 0, items: [] },
-      x: 100,
-      y: 100
-    };
-  }
+
     // Load starting location automatically
     this.loadLocationScript('locations/town.js').then(() => {
       if (window.TownLocation) {
