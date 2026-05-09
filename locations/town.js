@@ -6,8 +6,8 @@ window.TownLocation = {
       id: "merchant",
       x: 250,
       y: 300,
-      sprite: "https://dummyimage.com/64/e74c3c/ffffff?text=Merchant",
-      popupImage: "https://dummyimage.com/200x150/f39c12/ffffff?text=Sword",
+      sprite: "https://github.com/workit1990k-glitch/advgame/blob/main/4_F_FAIRY2.gif?raw=true",
+      popupImage: "https://raw.githubusercontent.com/workit1990k-glitch/advgame/refs/heads/main/4_M_FAIRYSCHOLAR.gif",
       text: "Welcome, traveler! Check out my finest wares."
     },
     {
