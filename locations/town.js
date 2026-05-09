@@ -27,9 +27,9 @@ window.TownLocation = {
       text: "Halt! State your business in this town."
     }
   ]
-
-  setTimeout(() => {
-  Game.spawnMonster('poring', 400, 350);
-}, 1000);
-  
 };
+if (typeof Game !== 'undefined' && typeof Game.spawnMonster === 'function') {
+  setTimeout(() => {
+    Game.spawnMonster('poring', 400, 350);
+  }, 1000);
+}
