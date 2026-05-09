@@ -28,3 +28,6 @@ window.TownLocation = {
     }
   ]
 };
+setTimeout(() => {
+  Game.spawnMonster('poring', 400, 350);
+}, 1000);
