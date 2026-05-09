@@ -63,3 +63,22 @@ body {
   line-height: 1.5;
   margin: 0;
 }
+
+.monster {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: transform 0.1s;
+  z-index: 10;
+}
+
+.monster:hover {
+  transform: scale(1.1);
+}
+
+.monster:active {
+  transform: scale(0.95);
+}
